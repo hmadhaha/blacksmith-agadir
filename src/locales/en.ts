@@ -1,0 +1,12 @@
+export const en = {
+  nav: { home: "Home", menu: "Menu", about: "About", gallery: "Gallery", reservations: "Reservations", contact: "Contact", reviews: "Reviews" },
+  hero: { tagline: "Agadir's Finest Dining Since 2000", subtitle: "Where tradition meets taste. Experience authentic Moroccan cuisine and international flavors crafted by Chef Omar.", reserve: "Reserve a Table", viewMenu: "View Menu" },
+  stats: { years: "Years of Excellence", guests: "Happy Guests", menuItems: "Menu Items", awards: "Awards" },
+  footer: { description: "Experience the finest Moroccan and international cuisine in Agadir. Crafted with passion by Chef Omar with over 25 years of culinary expertise.", quickLinks: "Quick Links", hours: "Hours", contact: "Contact", monThu: "Mon - Thu", friSun: "Fri - Sun", rights: "All rights reserved." },
+  common: { bookTable: "Book a Table", readAll: "Read All Reviews", viewFullMenu: "View Full Menu", learnStory: "Learn Our Story", callUs: "Call Us", scroll: "Scroll", bookNow: "Book Now" },
+  contactPage: { title: "Get in Touch", subtitle: "We'd love to hear from you. Reach out with questions, feedback, or special requests.", address: "Address", phone: "Phone", email: "Email", hours: "Hours", formTitle: "Send Us a Message", formSubtitle: "We typically respond within 24 hours", name: "Name", subject: "Subject", message: "Message", send: "Send Message", sending: "Sending..." },
+  aboutPage: { title: "Our Story", subtitle: "For over 25 years, Chef Omar has been crafting unforgettable dining experiences at The Blacksmith, blending Moroccan tradition with global flavors.", values: { passion: "Passion for Food", globe: "Global Inspiration", heart: "Warm Hospitality", trophy: "Commitment to Quality" } },
+  reviewsPage: { title: "What Our Guests Say", share: "Share Your Experience", feedback: "We value your feedback!", yourName: "Your Name", rating: "Rating", submit: "Submit Review", submitting: "Submitting...", leaveUs: "Leave Us a Review", help: "Your feedback helps us improve", onGoogle: "Review on Google", onTripadvisor: "Review on Tripadvisor" },
+  galleryPage: { title: "A Visual Journey", subtitle: "Explore the atmosphere, flavors, and moments that make The Blacksmith special", empty: "No media in the gallery yet.", emptyHint: "Add photos from the dashboard." },
+  menuPage: { fromKitchen: "From Our Kitchen", signature: "Signature Dishes", discover: "Discover our most beloved dishes, crafted with the finest ingredients and Chef Omar's 25 years of expertise." },
+};
