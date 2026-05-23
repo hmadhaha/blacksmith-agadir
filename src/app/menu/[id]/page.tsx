@@ -10,6 +10,8 @@ import { Textarea } from "@/components/ui/textarea";
 import { StarRating } from "@/components/ui/star-rating";
 import { ArrowLeft, Star, Send, ThumbsUp, Percent } from "lucide-react";
 import { imageUrl } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
+import { t } from "@/lib/i18n";
 
 interface MenuItem {
   id: string;
@@ -52,6 +54,7 @@ const defaultIngredients: Record<string, string> = {
 
 export default function MenuItemPage() {
   const params = useParams();
+  const { locale } = useLanguage();
   const [item, setItem] = useState<MenuItem | null>(null);
   const [loading, setLoading] = useState(true);
   const [dishRating, setDishRating] = useState(0);
@@ -111,7 +114,7 @@ export default function MenuItemPage() {
     <section className="pt-28 pb-16 lg:pt-36 lg:pb-20 bg-card border-b border-border">
       <div className="max-w-4xl mx-auto px-4 sm:px-6 lg:px-8">
         <Link href="/menu" className="inline-flex items-center gap-2 text-sm text-muted-foreground hover:text-foreground mb-8 transition-colors">
-          <ArrowLeft className="size-4" /> Back to Menu
+          <ArrowLeft className="size-4" /> {t(locale, "common.backToMenu")}
         </Link>
         <div className="grid lg:grid-cols-2 gap-12 items-start">
           <motion.div initial={{ opacity: 0, x: -30 }} animate={{ opacity: 1, x: 0 }} className="aspect-square rounded-2xl bg-gradient-to-br from-secondary to-muted flex items-center justify-center relative overflow-hidden">
@@ -120,7 +123,7 @@ export default function MenuItemPage() {
             ) : (
               <div className="size-40 rounded-full bg-secondary flex items-center justify-center text-6xl font-heading font-bold text-muted-foreground/30">{item.name.charAt(0)}</div>
             )}
-            {item.popular && <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground"><Star className="size-3 mr-1 fill-current" /> Popular</Badge>}
+            {item.popular && <Badge className="absolute top-4 left-4 bg-primary text-primary-foreground"><Star className="size-3 mr-1 fill-current" /> {t(locale, "menuPage.popular")}</Badge>}
             {item.discountPercent > 0 && (
               <Badge className="absolute top-4 right-4 bg-green-500 text-white"><Percent className="size-3 mr-1" /> {item.discountPercent}% OFF</Badge>
             )}
@@ -141,11 +144,11 @@ export default function MenuItemPage() {
               )}
             </div>
             <div className="border-t border-border pt-6 mb-8">
-              <h3 className="font-heading font-semibold mb-3">Ingredients</h3>
+              <h3 className="font-heading font-semibold mb-3">{t(locale, "menuPage.ingredients")}</h3>
               <p className="text-sm text-muted-foreground">{ingredients}</p>
             </div>
             <Link href="/reservations" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-medium transition-all">
-              Book a Table to Try This
+              {t(locale, "common.bookToTry")}
             </Link>
           </motion.div>
         </div>

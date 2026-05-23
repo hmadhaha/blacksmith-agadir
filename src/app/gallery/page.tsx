@@ -4,8 +4,10 @@ import { useState, useEffect } from "react";
 import { motion, AnimatePresence } from "framer-motion";
 import { Badge } from "@/components/ui/badge";
 import { X, ImageIcon } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
+import { t } from "@/lib/i18n";
 
-const categories = ["All", "Interior", "Food", "Drinks", "Events"];
+const catKeys = ["galleryPage.categories.all", "galleryPage.categories.interior", "galleryPage.categories.food", "galleryPage.categories.drinks", "galleryPage.categories.events"];
 
 interface GalleryItem {
   id: string;
@@ -16,7 +18,9 @@ interface GalleryItem {
 }
 
 export default function GalleryPage() {
-  const [activeCategory, setActiveCategory] = useState("All");
+  const { locale } = useLanguage();
+  const categories = catKeys.map(k => t(locale, k));
+  const [activeCategory, setActiveCategory] = useState(t(locale, "galleryPage.categories.all"));
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
   const [items, setItems] = useState<GalleryItem[]>([]);
 
@@ -39,12 +43,12 @@ export default function GalleryPage() {
       <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-20 bg-card border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4 px-3 py-1">Gallery</Badge>
+          <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "galleryPage.title")}</Badge>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl font-heading font-bold mb-4">
-            A Visual <span className="text-primary">Journey</span>
+            {t(locale, "galleryPage.title")}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-xl mx-auto">
-            Explore the atmosphere, flavors, and moments that make The Blacksmith special
+            {t(locale, "galleryPage.subtitle")}
           </motion.p>
         </div>
       </section>
@@ -74,8 +78,8 @@ export default function GalleryPage() {
           {items.length === 0 ? (
             <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} className="text-center py-20">
               <ImageIcon className="size-12 mx-auto text-muted-foreground/40 mb-4" />
-              <p className="text-muted-foreground">No media in the gallery yet.</p>
-              <p className="text-sm text-muted-foreground/60 mt-1">Add photos from the dashboard.</p>
+              <p className="text-muted-foreground">{t(locale, "galleryPage.empty")}</p>
+              <p className="text-sm text-muted-foreground/60 mt-1">{t(locale, "galleryPage.emptyHint")}</p>
             </motion.div>
           ) : (
             <motion.div layout className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
@@ -90,7 +94,7 @@ export default function GalleryPage() {
                   onClick={() => setSelectedItem(item)}
                   className="group relative aspect-[4/3] rounded-xl bg-gradient-to-br from-secondary to-muted overflow-hidden cursor-pointer"
                 >
-                  {item.src.startsWith("data:") || item.src.startsWith("http") ? (
+                  {item.src ? (
                     <img src={item.src} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
                   ) : (
                     <div className="w-full h-full flex items-center justify-center">
@@ -130,7 +134,7 @@ export default function GalleryPage() {
                 <X className="size-5" />
               </button>
               <div className="w-full h-full flex items-center justify-center bg-black">
-                {selectedItem.src.startsWith("data:") || selectedItem.src.startsWith("http") ? (
+                {selectedItem.src ? (
                   <img src={selectedItem.src} alt={selectedItem.title} className="max-w-full max-h-[85vh] object-contain" />
                 ) : (
                   <div className="text-muted-foreground p-10">

@@ -7,6 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Input } from "@/components/ui/input";
 import { Search, ArrowRight, Percent } from "lucide-react";
 import { imageUrl } from "@/lib/utils";
+import { useLanguage } from "@/contexts/language-context";
+import { t } from "@/lib/i18n";
 
 const categories = ["All", "Starters", "Main Course", "Pizza", "Pasta", "Burgers", "Seafood", "Desserts", "Beverages"];
 
@@ -22,6 +24,7 @@ interface MenuItem {
 }
 
 export default function MenuPage() {
+  const { locale } = useLanguage();
   const [activeCategory, setActiveCategory] = useState("All");
   const [searchQuery, setSearchQuery] = useState("");
   const [menuItems, setMenuItems] = useState<MenuItem[]>([]);
@@ -54,16 +57,16 @@ export default function MenuPage() {
       <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-20 bg-card border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4 px-3 py-1">Our Menu</Badge>
+          <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "menuPage.fromKitchen")}</Badge>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl font-heading font-bold mb-4">
             Flavors That <span className="text-primary">Inspire</span>
           </motion.h1>
-          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-2xl mx-auto text-lg">
-            Explore our carefully crafted menu blending Moroccan tradition with international flair
+          <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-xl mx-auto">
+            {t(locale, "menuPage.discover")}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.2 }} className="max-w-md mx-auto mt-8 relative">
             <Search className="absolute left-3 top-1/2 -translate-y-1/2 size-4 text-muted-foreground" />
-            <Input placeholder="Search dishes..." value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 bg-background" />
+            <Input placeholder={t(locale, "menuPage.signature")} value={searchQuery} onChange={(e) => setSearchQuery(e.target.value)} className="pl-10 bg-background" />
           </motion.div>
         </div>
       </section>
@@ -93,7 +96,7 @@ export default function MenuPage() {
           ) : filteredItems.length === 0 ? (
             <div className="text-center py-20">
               <Search className="size-16 text-muted-foreground/30 mx-auto mb-4" />
-              <p className="text-muted-foreground text-lg">No dishes found</p>
+              <p className="text-muted-foreground text-lg">{t(locale, "menuPage.signature")}</p>
             </div>
           ) : (
             Object.entries(groupedItems).map(([category, items]) => (
@@ -163,10 +166,10 @@ export default function MenuPage() {
 
       <section className="py-16 bg-card border-y border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <h2 className="text-2xl lg:text-3xl font-heading font-bold mb-4">Want to Try Our Dishes?</h2>
-          <p className="text-muted-foreground mb-6">Reserve a table and experience the taste of The Blacksmith</p>
+          <h2 className="text-2xl lg:text-3xl font-heading font-bold mb-4">{t(locale, "menuPage.fromKitchen")}</h2>
+          <p className="text-muted-foreground mb-6">{t(locale, "menuPage.discover")}</p>
           <Link href="/reservations" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-medium transition-all">
-            Book a Table <ArrowRight className="ml-2 size-4" />
+            {t(locale, "common.bookTable")} <ArrowRight className="ml-2 size-4" />
           </Link>
         </div>
       </section>

@@ -8,6 +8,8 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { StarRating } from "@/components/ui/star-rating";
+import { useLanguage } from "@/contexts/language-context";
+import { t } from "@/lib/i18n";
 
 interface Review {
   id: number;
@@ -23,6 +25,7 @@ const hardcoded: Review[] = [
 ];
 
 export default function ReviewsPage() {
+  const { locale } = useLanguage();
   const [apiReviews, setApiReviews] = useState<Review[]>([]);
   const [googleReviews, setGoogleReviews] = useState<Review[]>([]);
   const [googleRating, setGoogleRating] = useState("4.7");
@@ -86,9 +89,9 @@ export default function ReviewsPage() {
       <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-20 bg-card border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="relative max-w-4xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4 px-3 py-1">Reviews</Badge>
+          <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "reviewsPage.title")}</Badge>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl font-heading font-bold mb-4">
-            What Our <span className="text-primary">Guests Say</span>
+            {t(locale, "reviewsPage.title")}
           </motion.h1>
           <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="flex items-center justify-center gap-4 text-muted-foreground">
             <div className="flex gap-1">
@@ -107,8 +110,8 @@ export default function ReviewsPage() {
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }}
             className="bg-card border border-border rounded-xl p-6 lg:p-8 mb-8"
           >
-            <h2 className="text-xl font-heading font-bold mb-2">Share Your Experience</h2>
-            <p className="text-sm text-muted-foreground mb-6">We value your feedback!</p>
+            <h2 className="text-xl font-heading font-bold mb-2">{t(locale, "reviewsPage.share")}</h2>
+            <p className="text-sm text-muted-foreground mb-6">{t(locale, "reviewsPage.feedback")}</p>
             {submitted ? (
               <motion.div initial={{ opacity: 0, scale: 0.95 }} animate={{ opacity: 1, scale: 1 }} className="flex flex-col items-center py-6 text-center">
                 <CheckCircle className="size-12 text-green-500 mb-3" />
@@ -119,11 +122,11 @@ export default function ReviewsPage() {
               <form onSubmit={handleSubmit} className="space-y-4">
                 <div className="flex flex-col sm:flex-row gap-4">
                   <div className="flex-1">
-                    <label className="text-sm font-medium mb-1.5 block">Your Name</label>
+                    <label className="text-sm font-medium mb-1.5 block">{t(locale, "reviewsPage.yourName")}</label>
                     <Input placeholder="e.g. Ahmed M." value={form.author} onChange={(e) => setForm({ ...form, author: e.target.value })} required />
                   </div>
                   <div>
-                    <label className="text-sm font-medium mb-1.5 block">Rating</label>
+                    <label className="text-sm font-medium mb-1.5 block">{t(locale, "reviewsPage.rating")}</label>
                     <div className="h-10 flex items-center">
                       <StarRating rating={form.rating} onRatingChange={(r) => setForm({ ...form, rating: r })} size={28} interactive />
                     </div>
@@ -131,7 +134,7 @@ export default function ReviewsPage() {
                 </div>
                 <Textarea placeholder="Tell us about your experience..." rows={4} value={form.text} onChange={(e) => setForm({ ...form, text: e.target.value })} required />
                 <Button type="submit" disabled={!form.author.trim() || !form.rating || !form.text.trim() || submitting} className="w-full sm:w-auto">
-                  <Send className="size-4 mr-2" /> {submitting ? "Submitting..." : "Submit Review"}
+                  <Send className="size-4 mr-2" /> {submitting ? t(locale, "reviewsPage.submitting") : t(locale, "reviewsPage.submit")}
                 </Button>
               </form>
             )}
@@ -140,7 +143,7 @@ export default function ReviewsPage() {
           {apiReviews.length > 0 && (
             <div className="mb-8">
               <h3 className="text-sm font-heading font-semibold mb-4 text-muted-foreground uppercase tracking-wider">
-                Website Reviews ({apiReviews.length})
+                {t(locale, "reviewsPage.websiteReviews")} ({apiReviews.length})
               </h3>
               <div className="space-y-3">
                 {apiReviews.map((review) => (
@@ -167,7 +170,7 @@ export default function ReviewsPage() {
             <div className="mb-8">
               <div className="flex items-center gap-3 mb-4">
                 <h3 className="text-sm font-heading font-semibold text-muted-foreground uppercase tracking-wider">
-                  Google Reviews ({googleReviews.length})
+                  {t(locale, "reviewsPage.googleReviews")} ({googleReviews.length})
                 </h3>
                 <div className="flex items-center gap-1 px-2 py-0.5 rounded-full bg-green-50 dark:bg-green-950 text-green-700 dark:text-green-300 text-xs font-medium">
                   <Star className="size-3 fill-current" /> {googleRating}
@@ -207,16 +210,16 @@ export default function ReviewsPage() {
           </div>
 
           <div className="text-center mt-10 p-8 bg-card border border-border rounded-xl">
-            <h3 className="text-xl font-heading font-bold mb-2">Leave Us a Review</h3>
-            <p className="text-sm text-muted-foreground mb-4">Your feedback helps us improve</p>
+            <h3 className="text-xl font-heading font-bold mb-2">{t(locale, "reviewsPage.leaveUs")}</h3>
+            <p className="text-sm text-muted-foreground mb-4">{t(locale, "reviewsPage.help")}</p>
             <div className="flex flex-col sm:flex-row items-center justify-center gap-3">
               <a href="https://search.google.com/local/writereview?placeid=ChIJvcKVmzdhpQ0R7-2WqkwP-wQ" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted px-4 py-2 text-sm font-medium transition-all">
-                Review on Google <ExternalLink className="ml-2 size-4" />
+                {t(locale, "reviewsPage.onGoogle")} <ExternalLink className="ml-2 size-4" />
               </a>
               <a href="https://www.tripadvisor.com/Restaurant_Review-g293731-d26555772-Reviews-The_Blacksmith-Agadir_Souss_Massa.html" target="_blank" rel="noopener noreferrer"
                 className="inline-flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted px-4 py-2 text-sm font-medium transition-all">
-                Review on Tripadvisor <ExternalLink className="ml-2 size-4" />
+                {t(locale, "reviewsPage.onTripadvisor")} <ExternalLink className="ml-2 size-4" />
               </a>
             </div>
           </div>

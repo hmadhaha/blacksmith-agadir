@@ -2,12 +2,50 @@ import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
-const db = () => (getSupabase()?.from("settings") as any);
+const db = (t?: string) => (getSupabase()?.from(t || "settings") as any);
 
 export async function GET() {
-  const { data, error } = await db().select("value").eq("key", "gallery").single();
-  if (error) return NextResponse.json([]);
-  return NextResponse.json(data?.value || []);
+  const supabase = getSupabase();
+  const galleryItems: { id: string; title: string; category: string; type: string; src: string; url?: string }[] = [];
+
+  // Fetch manual gallery uploads
+  const { data: galleryData } = await db().select("value").eq("key", "gallery").single();
+  if (galleryData?.value) {
+    for (const item of (galleryData.value as { id: string; title: string; category: string; type: string; url?: string }[])) {
+      galleryItems.push({
+        id: item.id,
+        title: item.title,
+        category: item.category,
+        type: item.type,
+        src: (item as { src?: string; url?: string }).src || item.url || "",
+        url: item.url,
+      });
+    }
+  }
+
+  // Fetch menu items with images as gallery entries
+  if (supabase) {
+    const { data: menuItems } = await supabase.from("menu_items").select("id, name, image").not("image", "is", null);
+    if (menuItems) {
+      for (const item of menuItems) {
+        const exists = galleryItems.some(g => g.title === item.name);
+        if (!exists && item.image) {
+          const src = item.image.startsWith("data:") || item.image.startsWith("http") || item.image.startsWith("/")
+            ? item.image
+            : "/food/" + encodeURIComponent(item.image);
+          galleryItems.push({
+            id: "menu-" + item.id,
+            title: item.name,
+            category: "Food",
+            type: "image",
+            src,
+          });
+        }
+      }
+    }
+  }
+
+  return NextResponse.json(galleryItems);
 }
 
 export async function POST(request: Request) {

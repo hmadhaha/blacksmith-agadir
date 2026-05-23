@@ -110,7 +110,7 @@ export default function HomePage() {
         <motion.div style={{ opacity: heroOpacity }} className="relative z-20 text-center px-4 max-w-4xl mx-auto">
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.2 }}>
             <Badge variant="secondary" className="mb-6 px-4 py-1.5 text-xs tracking-widest uppercase bg-white/10 text-white border-white/20 backdrop-blur-sm">
-              Agadir&apos;s Finest Dining Since 2000
+              {t(locale, "home.heroBadge")}
             </Badge>
           </motion.div>
           <motion.h1 initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.4 }} className="text-5xl sm:text-6xl md:text-7xl lg:text-8xl font-heading font-bold text-white mb-6 text-shadow">
@@ -118,14 +118,14 @@ export default function HomePage() {
             The<span className="text-primary block mt-2">Blacksmith</span>
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.6 }} className="text-lg sm:text-xl text-white/80 mb-8 max-w-2xl mx-auto leading-relaxed">
-            Where tradition meets taste. Experience authentic Moroccan cuisine and international flavors crafted by Chef Omar.
+            {t(locale, "home.heroSubtitle")}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 30 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.8 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/reservations" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-8 py-4 text-base font-medium transition-all">
-              Reserve a Table <ArrowRight className="ml-2 size-4" />
+              {t(locale, "home.heroReserve")} <ArrowRight className="ml-2 size-4" />
             </Link>
             <Link href="/menu" className="inline-flex items-center justify-center rounded-lg border border-white/20 text-white hover:bg-white/10 px-8 py-4 text-base font-medium transition-all">
-              <Play className="mr-2 size-4" /> View Menu
+              <Play className="mr-2 size-4" /> {t(locale, "home.heroViewMenu")}
             </Link>
           </motion.div>
         </motion.div>
@@ -157,9 +157,9 @@ export default function HomePage() {
       <AnimatedSection className="py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <Badge variant="secondary" className="mb-4 px-3 py-1">From Our Kitchen</Badge>
-            <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">Signature Dishes</h2>
-            <p className="text-muted-foreground max-w-2xl mx-auto">Discover our most beloved dishes, crafted with the finest ingredients and Chef Omar&apos;s 25 years of expertise.</p>
+            <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "home.featuredBadge")}</Badge>
+            <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">{t(locale, "home.featuredTitle")}</h2>
+            <p className="text-muted-foreground max-w-2xl mx-auto">{t(locale, "home.featuredDesc")}</p>
           </div>
           <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
             {featuredDishes.map((dish, i) => (
@@ -194,7 +194,7 @@ export default function HomePage() {
           </div>
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
             <Link href="/menu" className="inline-flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted px-6 py-3 text-sm font-medium transition-all">
-              View Full Menu <ArrowRight className="ml-2 size-4" />
+              {t(locale, "common.viewFullMenu")} <ArrowRight className="ml-2 size-4" />
             </Link>
           </motion.div>
         </div>
@@ -205,25 +205,25 @@ export default function HomePage() {
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="grid lg:grid-cols-2 gap-12 lg:gap-16 items-center">
             <div>
-              <Badge variant="secondary" className="mb-4 px-3 py-1">Our Story</Badge>
-              <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-6">A Taste of Morocco, <span className="text-primary">A World of Flavor</span></h2>
-              <p className="text-muted-foreground leading-relaxed mb-6">After traveling the world for 25 years, Chef Omar brought his passion for international cuisine back to Agadir. At The Blacksmith, we blend traditional Moroccan recipes with global influences to create an unforgettable dining experience.</p>
+              <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "home.aboutBadge")}</Badge>
+              <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-6">{t(locale, "home.aboutTitle")} <span className="text-primary">{t(locale, "home.aboutTitleSpan")}</span></h2>
+              <p className="text-muted-foreground leading-relaxed mb-6">{t(locale, "home.aboutText")}</p>
               <div className="flex flex-col gap-4 mb-8">
                 {[
-                  { icon: ChefHat, text: "25+ years of culinary excellence" },
-                  { icon: MapPin, text: "Prime location in the heart of Agadir" },
-                  { icon: Clock, text: "Serving from 8:30 AM to 1:00 AM daily" },
+                  { icon: ChefHat, textKey: "home.aboutYears" },
+                  { icon: MapPin, textKey: "home.aboutLocation" },
+                  { icon: Clock, textKey: "home.aboutHours" },
                 ].map((item) => (
-                  <div key={item.text} className="flex items-center gap-3 text-sm">
+                  <div key={item.textKey} className="flex items-center gap-3 text-sm">
                     <div className="size-8 rounded-full bg-primary/10 flex items-center justify-center">
                       <item.icon className="size-4 text-primary" />
                     </div>
-                    <span className="text-muted-foreground">{item.text}</span>
+                    <span className="text-muted-foreground">{t(locale, item.textKey)}</span>
                   </div>
                 ))}
               </div>
               <Link href="/about" className="inline-flex items-center justify-center rounded-lg bg-primary text-primary-foreground hover:bg-primary/90 px-6 py-3 text-sm font-medium transition-all">
-                Learn Our Story <ArrowRight className="ml-2 size-4" />
+                {t(locale, "home.aboutLink")} <ArrowRight className="ml-2 size-4" />
               </Link>
             </div>
             <div className="relative">
@@ -243,9 +243,9 @@ export default function HomePage() {
       <AnimatedSection className="py-20 lg:py-28">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="text-center mb-14">
-            <Badge variant="secondary" className="mb-4 px-3 py-1">Guest Reviews</Badge>
-            <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">What Our Guests Say</h2>
-            <p className="text-muted-foreground max-w-xl mx-auto">Rated <span className="text-primary font-semibold">4.7</span> on Google with over 3,500 reviews</p>
+            <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "home.reviewsBadge")}</Badge>
+            <h2 className="text-3xl lg:text-5xl font-heading font-bold mb-4">{t(locale, "home.reviewsTitle")}</h2>
+            <p className="text-muted-foreground max-w-xl mx-auto">{t(locale, "home.reviewsSubtitle")} <span className="text-primary font-semibold">4.7</span> {t(locale, "home.reviewsOnGoogle")} 3,500 {t(locale, "home.reviewsReviews")}</p>
           </div>
           <div className="grid md:grid-cols-3 gap-6">
             {reviews.map((review, i) => (
@@ -270,7 +270,7 @@ export default function HomePage() {
           </div>
           <motion.div initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} className="text-center mt-10">
             <Link href="/reviews" className="inline-flex items-center justify-center rounded-lg border border-border bg-background hover:bg-muted px-6 py-3 text-sm font-medium transition-all">
-              Read All Reviews <ArrowRight className="ml-2 size-4" />
+              {t(locale, "common.readAll")} <ArrowRight className="ml-2 size-4" />
             </Link>
           </motion.div>
         </div>
@@ -284,17 +284,17 @@ export default function HomePage() {
         </div>
         <div className="relative z-10 max-w-3xl mx-auto text-center px-4">
           <motion.h2 initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="text-3xl lg:text-5xl font-heading font-bold text-white mb-4">
-            Ready for an Unforgettable Meal?
+            {t(locale, "home.ctaTitle")}
           </motion.h2>
           <motion.p initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.1 }} className="text-white/80 text-lg mb-8 max-w-xl mx-auto">
-            Book your table now and experience the finest dining in Agadir
+            {t(locale, "home.ctaSubtitle")}
           </motion.p>
           <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.2 }} className="flex flex-col sm:flex-row items-center justify-center gap-4">
             <Link href="/reservations" className="inline-flex items-center justify-center rounded-lg bg-white text-primary hover:bg-white/90 px-8 py-4 text-base font-medium transition-all">
-              Book Now <ArrowRight className="ml-2 size-4" />
+              {t(locale, "home.ctaBook")} <ArrowRight className="ml-2 size-4" />
             </Link>
             <Link href="tel:+212808600401" className="inline-flex items-center justify-center rounded-lg border border-white/30 text-white hover:bg-white/10 px-8 py-4 text-base font-medium transition-all">
-              <Play className="mr-2 size-4" /> Call Us
+              <Play className="mr-2 size-4" /> {t(locale, "home.ctaCall")}
             </Link>
           </motion.div>
         </div>

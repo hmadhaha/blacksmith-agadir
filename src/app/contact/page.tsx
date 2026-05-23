@@ -8,8 +8,11 @@ import { Input } from "@/components/ui/input";
 import { Textarea } from "@/components/ui/textarea";
 import { toast } from "sonner";
 import { Phone, Mail, MapPin, Clock, Send } from "lucide-react";
+import { useLanguage } from "@/contexts/language-context";
+import { t } from "@/lib/i18n";
 
 export default function ContactPage() {
+  const { locale } = useLanguage();
   const [form, setForm] = useState({ name: "", email: "", phone: "", subject: "", message: "" });
   const [submitting, setSubmitting] = useState(false);
 
@@ -40,12 +43,12 @@ export default function ContactPage() {
       <section className="relative pt-28 pb-16 lg:pt-36 lg:pb-20 bg-card border-b border-border overflow-hidden">
         <div className="absolute inset-0 bg-gradient-to-br from-primary/5 via-transparent to-secondary/5" />
         <div className="relative max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 text-center">
-          <Badge variant="secondary" className="mb-4 px-3 py-1">Contact</Badge>
+          <Badge variant="secondary" className="mb-4 px-3 py-1">{t(locale, "contactPage.title")}</Badge>
           <motion.h1 initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} className="text-4xl lg:text-6xl font-heading font-bold mb-4">
-            Get in <span className="text-primary">Touch</span>
+            {t(locale, "contactPage.title")}
           </motion.h1>
           <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.1 }} className="text-muted-foreground max-w-xl mx-auto">
-            We&apos;d love to hear from you. Reach out with questions, feedback, or special requests.
+            {t(locale, "contactPage.subtitle")}
           </motion.p>
         </div>
       </section>
@@ -56,17 +59,17 @@ export default function ContactPage() {
             <motion.div initial={{ opacity: 0, x: -30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <div className="space-y-6 mb-8">
                 {[
-                  { icon: MapPin, label: "Address", value: "2 Rue des Orangers, Agadir 80000", href: "https://maps.google.com/?q=2+Rue+des+Orangers+Agadir+80000" },
-                  { icon: Phone, label: "Phone", value: "+212 8086 00401", href: "tel:+212808600401" },
-                  { icon: Mail, label: "Email", value: "info@blacksmith-agadir.com", href: "mailto:info@blacksmith-agadir.com" },
-                  { icon: Clock, label: "Hours", value: "Daily 8:30 AM - 1:00 AM" },
+                  { icon: MapPin, labelKey: "contactPage.address", value: "2 Rue des Orangers, Agadir 80000", href: "https://maps.google.com/?q=2+Rue+des+Orangers+Agadir+80000" },
+                  { icon: Phone, labelKey: "contactPage.phone", value: "+212 8086 00401", href: "tel:+212808600401" },
+                  { icon: Mail, labelKey: "contactPage.email", value: "info@blacksmith-agadir.com", href: "mailto:info@blacksmith-agadir.com" },
+                  { icon: Clock, labelKey: "contactPage.hours", value: "Daily 8:30 AM - 1:00 AM" },
                 ].map((item) => (
-                  <div key={item.label} className="flex items-start gap-4">
+                  <div key={item.labelKey} className="flex items-start gap-4">
                     <div className="size-10 rounded-lg bg-primary/10 flex items-center justify-center shrink-0">
                       <item.icon className="size-5 text-primary" />
                     </div>
                     <div>
-                      <p className="text-sm text-muted-foreground">{item.label}</p>
+                      <p className="text-sm text-muted-foreground">{t(locale, item.labelKey)}</p>
                       {item.href ? (
                         <a href={item.href} target="_blank" rel="noopener noreferrer" className="font-medium hover:text-primary transition-colors">
                           {item.value}
@@ -95,34 +98,34 @@ export default function ContactPage() {
 
             <motion.div initial={{ opacity: 0, x: 30 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }}>
               <form onSubmit={handleSubmit} className="bg-card border border-border rounded-xl p-6 lg:p-8 space-y-4">
-                <h2 className="text-2xl font-heading font-bold mb-2">Send Us a Message</h2>
-                <p className="text-sm text-muted-foreground mb-4">We typically respond within 24 hours</p>
+                <h2 className="text-2xl font-heading font-bold mb-2">{t(locale, "contactPage.formTitle")}</h2>
+                <p className="text-sm text-muted-foreground mb-4">{t(locale, "contactPage.formSubtitle")}</p>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Name *</label>
-                    <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder="Your name" />
+                    <label className="text-sm font-medium">{t(locale, "contactPage.name")} *</label>
+                    <Input required value={form.name} onChange={(e) => setForm({ ...form, name: e.target.value })} placeholder={t(locale, "contactPage.name")} />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Email *</label>
+                    <label className="text-sm font-medium">{t(locale, "contactPage.emailLabel")} *</label>
                     <Input required type="email" value={form.email} onChange={(e) => setForm({ ...form, email: e.target.value })} placeholder="your@email.com" />
                   </div>
                 </div>
                 <div className="grid sm:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Phone</label>
+                    <label className="text-sm font-medium">{t(locale, "contactPage.phoneLabel")}</label>
                     <Input value={form.phone} onChange={(e) => setForm({ ...form, phone: e.target.value })} placeholder="+212 XXX" />
                   </div>
                   <div className="space-y-2">
-                    <label className="text-sm font-medium">Subject *</label>
-                    <Input required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder="What's this about?" />
+                    <label className="text-sm font-medium">{t(locale, "contactPage.subject")} *</label>
+                    <Input required value={form.subject} onChange={(e) => setForm({ ...form, subject: e.target.value })} placeholder={t(locale, "contactPage.subject")} />
                   </div>
                 </div>
                 <div className="space-y-2">
-                  <label className="text-sm font-medium">Message *</label>
-                  <Textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder="Your message..." rows={5} />
+                  <label className="text-sm font-medium">{t(locale, "contactPage.message")} *</label>
+                  <Textarea required value={form.message} onChange={(e) => setForm({ ...form, message: e.target.value })} placeholder={t(locale, "contactPage.message")} rows={5} />
                 </div>
                 <Button type="submit" size="lg" className="w-full" disabled={submitting}>
-                  <Send className="mr-2 size-4" /> {submitting ? "Sending..." : "Send Message"}
+                  <Send className="mr-2 size-4" /> {submitting ? t(locale, "contactPage.sending") : t(locale, "contactPage.send")}
                 </Button>
               </form>
             </motion.div>

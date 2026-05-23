@@ -12,7 +12,8 @@ interface GalleryItem {
   title: string;
   category: string;
   type: "image" | "video";
-  url: string;
+  src: string;
+  url?: string;
 }
 
 export default function DashboardGalleryPage() {
@@ -54,7 +55,7 @@ export default function DashboardGalleryPage() {
 
   const handleAdd = async () => {
     if (!form.title || !form.url) { toast.error("Title and image required"); return; }
-    const item: GalleryItem = { id: Date.now().toString(), ...form };
+    const item: GalleryItem = { id: Date.now().toString(), ...form, src: form.url };
     try {
       const res = await fetch("/api/gallery", {
         method: "POST",
@@ -103,9 +104,9 @@ export default function DashboardGalleryPage() {
             className="group relative aspect-[4/3] rounded-xl bg-gradient-to-br from-secondary to-muted overflow-hidden"
           >
             {item.type === "video" ? (
-              <video src={item.url} className="w-full h-full object-cover" />
-            ) : item.url ? (
-              <img src={item.url} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
+              <video src={item.src} className="w-full h-full object-cover" />
+            ) : item.src ? (
+              <img src={item.src} alt={item.title} className="w-full h-full object-cover" loading="lazy" />
             ) : (
               <div className="absolute inset-0 flex items-center justify-center">
                 <ImageIcon className="size-10 text-muted-foreground/30" />
