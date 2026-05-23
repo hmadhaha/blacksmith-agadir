@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = () => (getSupabase()?.from("menu_items") as any);
@@ -26,6 +27,7 @@ export async function GET() {
 
 export async function POST(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     if (!getSupabase()) return NextResponse.json({ error: "No DB" }, { status: 500 });
     const body = await request.json();
     const newItem = {

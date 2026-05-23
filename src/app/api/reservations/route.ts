@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = () => (getSupabase()?.from("reservations") as any);
@@ -23,8 +24,9 @@ export async function POST(request: Request) {
   }
 }
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     const { data, error } = await db().select("*").order("date", { ascending: false });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json(data || []);
@@ -35,6 +37,7 @@ export async function GET() {
 
 export async function PATCH(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     const { id, status } = await request.json();
     const { error } = await db().update({ status }).eq("id", id);
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });

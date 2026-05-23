@@ -1,8 +1,8 @@
 import { NextResponse } from "next/server";
-
-export const config = { api: { bodyParser: false } };
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 export async function POST(request: Request) {
+  if (!(await verifyAuth(request))) return unauthorized();
   try {
     const formData = await request.formData();
     const file = formData.get("file") as File | null;

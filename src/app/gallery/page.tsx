@@ -7,8 +7,6 @@ import { X, ImageIcon } from "lucide-react";
 import { useLanguage } from "@/contexts/language-context";
 import { t } from "@/lib/i18n";
 
-const catKeys = ["galleryPage.categories.all", "galleryPage.categories.interior", "galleryPage.categories.food", "galleryPage.categories.drinks", "galleryPage.categories.events"];
-
 interface GalleryItem {
   id: string;
   title: string;
@@ -19,9 +17,16 @@ interface GalleryItem {
 
 export default function GalleryPage() {
   const { locale } = useLanguage();
-  const categories = catKeys.map(k => t(locale, k));
-  const [activeCategory, setActiveCategory] = useState(t(locale, "galleryPage.categories.all"));
   const [selectedItem, setSelectedItem] = useState<GalleryItem | null>(null);
+  const catKeys = ["All", "Interior", "Food", "Drinks", "Events"] as const;
+  const categoryLabels: Record<string, string> = {
+    All: t(locale, "galleryPage.categories.all"),
+    Interior: t(locale, "galleryPage.categories.interior"),
+    Food: t(locale, "galleryPage.categories.food"),
+    Drinks: t(locale, "galleryPage.categories.drinks"),
+    Events: t(locale, "galleryPage.categories.events"),
+  };
+  const [activeCategory, setActiveCategory] = useState("All");
   const [items, setItems] = useState<GalleryItem[]>([]);
 
   useEffect(() => {
@@ -56,17 +61,17 @@ export default function GalleryPage() {
       <section className="sticky top-16 lg:top-20 z-30 bg-background/95 backdrop-blur-sm border-b border-border">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-3 overflow-x-auto">
           <div className="flex gap-2 min-w-max">
-            {categories.map((cat) => (
+            {catKeys.map((key) => (
               <button
-                key={cat}
-                onClick={() => setActiveCategory(cat)}
+                key={key}
+                onClick={() => setActiveCategory(key)}
                 className={`px-4 py-2 rounded-full text-sm font-medium whitespace-nowrap transition-all ${
-                  activeCategory === cat
+                  activeCategory === key
                     ? "bg-primary text-primary-foreground"
                     : "bg-secondary text-secondary-foreground hover:bg-secondary/80"
                 }`}
               >
-                {cat}
+                {categoryLabels[key]}
               </button>
             ))}
           </div>

@@ -21,9 +21,14 @@ export default function DashboardReservationsPage() {
   const [reservations, setReservations] = useState<Reservation[]>([]);
   const [loading, setLoading] = useState(true);
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const fetchReservations = async () => {
     try {
-      const res = await fetch("/api/reservations");
+      const res = await fetch("/api/reservations", { headers: authHeaders() });
       const data = await res.json();
       setReservations(Array.isArray(data) ? data : []);
     } catch { toast.error("Failed to load"); }
@@ -34,12 +39,13 @@ export default function DashboardReservationsPage() {
 
   const updateStatus = async (id: number, status: string) => {
     try {
-      await fetch("/api/reservations", {
+      const res = await fetch("/api/reservations", {
         method: "PATCH",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({ id, status }),
       });
-      toast.success(`Reservation ${status}`);
+      if (res.ok) toast.success(`Reservation ${status}`);
+      else toast.error("Failed to update");
       fetchReservations();
     } catch { toast.error("Failed to update"); }
   };

@@ -27,7 +27,8 @@ export default function DashboardReviewsPage() {
 
   const fetchReviews = async () => {
     try {
-      const res = await fetch("/api/reviews");
+      const token = sessionStorage.getItem("bs-auth");
+      const res = await fetch("/api/reviews", { headers: token ? { Authorization: `Bearer ${token}` } : {} });
       const data = await res.json();
       setReviews(Array.isArray(data) ? data : []);
     } catch { toast.error("Failed to load reviews"); }

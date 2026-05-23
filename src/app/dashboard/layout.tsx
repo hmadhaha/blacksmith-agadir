@@ -58,7 +58,7 @@ export default function DashboardLayout({
         if (r.ok) setAuthenticated(true);
         else sessionStorage.removeItem("bs-auth");
       }).catch(() => {
-        setAuthenticated(true);
+        sessionStorage.removeItem("bs-auth");
       }).finally(() => setChecking(false));
     } else {
       setChecking(false);

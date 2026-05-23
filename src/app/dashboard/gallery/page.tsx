@@ -34,6 +34,11 @@ export default function DashboardGalleryPage() {
 
   useEffect(() => { fetchItems(); }, []);
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const handleFileUpload = async (e: React.ChangeEvent<HTMLInputElement>) => {
     const file = e.target.files?.[0];
     if (!file) return;
@@ -41,7 +46,7 @@ export default function DashboardGalleryPage() {
     try {
       const fd = new FormData();
       fd.append("file", file);
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const res = await fetch("/api/upload", { method: "POST", headers: authHeaders(), body: fd });
       const data = await res.json();
       if (data.url) {
         setForm((prev) => ({ ...prev, url: data.url, type: "image" }));
@@ -59,7 +64,7 @@ export default function DashboardGalleryPage() {
     try {
       const res = await fetch("/api/gallery", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(item),
       });
       if (res.ok) {
@@ -76,7 +81,7 @@ export default function DashboardGalleryPage() {
   const handleDelete = async (id: string) => {
     if (!confirm("Delete this item?")) return;
     try {
-      const res = await fetch(`/api/gallery?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/gallery?id=${id}`, { method: "DELETE", headers: authHeaders() });
       if (res.ok) {
         setItems((prev) => prev.filter((i) => i.id !== id));
         toast.success("Deleted");

@@ -20,10 +20,15 @@ export default function DashboardMessagesPage() {
   const [loading, setLoading] = useState(true);
   const [expanded, setExpanded] = useState<number | null>(null);
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const fetchMessages = async () => {
     setLoading(true);
     try {
-      const res = await fetch("/api/contact");
+      const res = await fetch("/api/contact", { headers: authHeaders() });
       const data = await res.json();
       setMessages(Array.isArray(data) ? data : []);
     } catch {
@@ -38,7 +43,7 @@ export default function DashboardMessagesPage() {
   const handleDelete = async (id: number) => {
     if (!confirm("Delete this message?")) return;
     try {
-      const res = await fetch(`/api/contact?id=${id}`, { method: "DELETE" });
+      const res = await fetch(`/api/contact?id=${id}`, { method: "DELETE", headers: authHeaders() });
       if (res.ok) {
         setMessages((prev) => prev.filter((m) => m.id !== id));
         toast.success("Message deleted");

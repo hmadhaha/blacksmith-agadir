@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = () => (getSupabase()?.from("menu_items") as any);
@@ -27,6 +28,7 @@ export async function GET(_request: Request, { params }: { params: Promise<{ id:
 
 export async function PUT(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     if (!getSupabase()) return NextResponse.json({ error: "Not found" }, { status: 404 });
     const { id } = await params;
     const body = await request.json();
@@ -47,8 +49,9 @@ export async function PUT(request: Request, { params }: { params: Promise<{ id: 
   }
 }
 
-export async function DELETE(_request: Request, { params }: { params: Promise<{ id: string }> }) {
+export async function DELETE(request: Request, { params }: { params: Promise<{ id: string }> }) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     if (!getSupabase()) return NextResponse.json({ error: "Not found" }, { status: 404 });
     const { id } = await params;
     const { error } = await db().delete().eq("id", id);

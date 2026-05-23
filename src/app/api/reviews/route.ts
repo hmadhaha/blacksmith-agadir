@@ -1,11 +1,13 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = () => (getSupabase()?.from("reviews") as any);
 
-export async function GET() {
+export async function GET(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     const { data, error } = await db().select("*").order("id", { ascending: false });
     if (error) return NextResponse.json({ error: error.message }, { status: 500 });
     return NextResponse.json(data || []);

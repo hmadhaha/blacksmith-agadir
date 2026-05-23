@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = () => (getSupabase()?.from("settings") as any);
@@ -18,6 +19,7 @@ export async function GET(request: Request) {
 
 export async function PUT(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     const { searchParams } = new URL(request.url);
     const key = searchParams.get("key") || "general";
     const body = await request.json();

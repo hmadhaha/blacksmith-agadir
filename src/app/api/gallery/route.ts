@@ -1,5 +1,6 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 const db = (t?: string) => (getSupabase()?.from(t || "settings") as any);
@@ -49,6 +50,7 @@ export async function GET() {
 }
 
 export async function POST(request: Request) {
+  if (!(await verifyAuth(request))) return unauthorized();
   const body = await request.json();
   const { data: existing } = await db().select("value").eq("key", "gallery").single();
   const items = existing?.value || [];
@@ -59,6 +61,7 @@ export async function POST(request: Request) {
 }
 
 export async function DELETE(request: Request) {
+  if (!(await verifyAuth(request))) return unauthorized();
   const { searchParams } = new URL(request.url);
   const id = searchParams.get("id");
   if (!id) return NextResponse.json({ error: "Missing id" }, { status: 400 });

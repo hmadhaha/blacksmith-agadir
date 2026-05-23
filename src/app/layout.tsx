@@ -4,6 +4,7 @@ import "./globals.css";
 import { SiteHeader } from "@/components/shared/site-header";
 import { SiteFooter } from "@/components/shared/site-footer";
 import { Toaster } from "@/components/ui/sonner";
+import { ThemeProvider } from "next-themes";
 import { LanguageProvider } from "@/contexts/language-context";
 
 const playfair = Playfair_Display({
@@ -57,12 +58,14 @@ export default function RootLayout({
       className={`${playfair.variable} ${outfit.variable} h-full antialiased`}
     >
       <body className="min-h-full flex flex-col">
-        <LanguageProvider>
-          <SiteHeader />
-          <main className="flex-1">{children}</main>
-          <SiteFooter />
-          <Toaster position="top-center" richColors />
-        </LanguageProvider>
+        <ThemeProvider attribute="class" defaultTheme="system" enableSystem disableTransitionOnChange>
+          <LanguageProvider>
+            <SiteHeader />
+            <main className="flex-1">{children}</main>
+            <SiteFooter />
+            <Toaster position="top-center" richColors />
+          </LanguageProvider>
+        </ThemeProvider>
       </body>
     </html>
   );

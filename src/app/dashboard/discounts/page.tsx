@@ -38,11 +38,16 @@ export default function DiscountsPage() {
   const discounted = items.filter((i) => i.discountPercent > 0);
   const regular = items.filter((i) => !i.discountPercent);
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const applyDiscount = async (id: string) => {
     try {
       const res = await fetch(`/api/menu/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({ discountPercent: discountValue }),
       });
       const data = await res.json();
@@ -59,7 +64,7 @@ export default function DiscountsPage() {
     try {
       const res = await fetch(`/api/menu/${id}`, {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({ discountPercent: 0 }),
       });
       const data = await res.json();

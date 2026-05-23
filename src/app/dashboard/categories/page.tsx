@@ -44,13 +44,18 @@ export default function DashboardCategoriesPage() {
   const getItemCount = (catName: string) =>
     menuItems.filter((i) => i.category === catName).length;
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const handleAdd = async () => {
     if (!newName.trim()) return;
     const item = { id: Date.now().toString(), name: newName.trim() };
     try {
       const res = await fetch("/api/categories", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(item),
       });
       if (res.ok) {
@@ -68,7 +73,7 @@ export default function DashboardCategoriesPage() {
     try {
       const res = await fetch("/api/categories", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(updated),
       });
       if (res.ok) {
@@ -85,7 +90,7 @@ export default function DashboardCategoriesPage() {
     try {
       const res = await fetch("/api/categories", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(updated),
       });
       if (res.ok) {

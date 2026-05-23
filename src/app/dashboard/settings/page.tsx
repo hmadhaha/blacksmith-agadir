@@ -35,13 +35,18 @@ export default function DashboardSettingsPage() {
       .finally(() => setLoading(false));
   }, []);
 
+  const authHeaders = (): Record<string, string> => {
+    const token = sessionStorage.getItem("bs-auth");
+    return token ? { Authorization: `Bearer ${token}` } : {};
+  };
+
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     setSaving(true);
     try {
       const res = await fetch("/api/settings", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify(settings),
       });
       if (res.ok) {
@@ -79,7 +84,7 @@ export default function DashboardSettingsPage() {
       }
       const res = await fetch("/api/settings/password", {
         method: "PUT",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", ...authHeaders() },
         body: JSON.stringify({ password: newPassword }),
       });
       if (res.ok) {

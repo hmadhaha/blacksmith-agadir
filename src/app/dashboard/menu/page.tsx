@@ -87,7 +87,10 @@ export default function DashboardMenuPage() {
     const fd = new FormData();
     fd.append("file", file);
     try {
-      const res = await fetch("/api/upload", { method: "POST", body: fd });
+      const token = sessionStorage.getItem("bs-auth");
+      const headers: Record<string, string> = {};
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch("/api/upload", { method: "POST", headers, body: fd });
       const data = await res.json();
       if (data.success) {
         setForm({ ...form, image: data.url });
@@ -107,7 +110,10 @@ export default function DashboardMenuPage() {
     try {
       const url = editId ? `/api/menu/${editId}` : "/api/menu";
       const method = editId ? "PUT" : "POST";
-      const res = await fetch(url, { method, headers: { "Content-Type": "application/json" }, body: JSON.stringify(form) });
+      const token = sessionStorage.getItem("bs-auth");
+      const headers: Record<string, string> = { "Content-Type": "application/json" };
+      if (token) headers["Authorization"] = `Bearer ${token}`;
+      const res = await fetch(url, { method, headers, body: JSON.stringify(form) });
       const data = await res.json();
       if (data.success) {
         toast.success(editId ? "Item updated" : "Item added");
@@ -121,7 +127,8 @@ export default function DashboardMenuPage() {
   const handleDelete = async () => {
     if (!deleteId) return;
     try {
-      const res = await fetch(`/api/menu/${deleteId}`, { method: "DELETE" });
+      const token = sessionStorage.getItem("bs-auth");
+      const res = await fetch(`/api/menu/${deleteId}`, { method: "DELETE", headers: token ? { Authorization: `Bearer ${token}` } : {} });
       const data = await res.json();
       if (data.success) {
         toast.success("Item deleted");

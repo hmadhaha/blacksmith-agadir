@@ -1,8 +1,10 @@
 import { NextResponse } from "next/server";
 import { getSupabase } from "@/lib/supabase";
+import { verifyAuth, unauthorized } from "@/lib/auth-utils";
 
 export async function PUT(request: Request) {
   try {
+    if (!(await verifyAuth(request))) return unauthorized();
     const { password } = await request.json();
   if (!password || password.length < 6) {
     return NextResponse.json({ error: "Password too short" }, { status: 400 });
